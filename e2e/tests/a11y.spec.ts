@@ -22,6 +22,8 @@ const SCENARIOS: { name: string; path: string; scheme: 'light' | 'dark'; kid?: b
   { name: 'Explore menu open, Deep Space', path: '/', scheme: 'dark', menu: true },
   { name: '404 page', path: '/no-such-page-e2e/', scheme: 'light' },
   { name: '404 page, Deep Space', path: '/no-such-page-e2e/', scheme: 'dark' },
+  { name: 'old Vedic Math address (moved notice)', path: '/vedic-math/', scheme: 'light' },
+  { name: 'old Vedic Math address (moved notice), Deep Space', path: '/vedic-math/', scheme: 'dark' },
 ];
 
 // Violations seen on the live site when this suite was written. Each entry is a real bug to fix;

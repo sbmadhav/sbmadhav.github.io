@@ -52,6 +52,38 @@ test.describe('Plumbing', () => {
     await expect(page.locator('h1')).toContainText('Madhav');
   });
 
+  test('the old Vedic Math address says it moved and links to learnvedicmath.com', async ({ page, request }) => {
+    // Nothing is published under /vedic-math/ any more, so the 404 page answers and points to the new site
+    for (const path of ['/vedic-math/', '/vedic-math', '/vedic-math/play/arena']) {
+      const res = await page.goto(path);
+      expect(res?.status(), path).toBe(404);
+      await expect(page).toHaveTitle(/Vedic Math has moved/);
+      await expect(page.locator('h1')).toHaveCount(1);
+      await expect(page.locator('h1 .pro')).toHaveText('Vedic Math has moved.');
+      const link = page.locator('main a.md-btn--primary');
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', 'https://learnvedicmath.com/');
+      await expect(link.locator('.pro')).toHaveText('Go to learnvedicmath.com');
+      await expect(page.locator('main a.md-btn[href="/"]')).toBeVisible();
+      // The plain 404 copy is gone, not just hidden
+      await expect(page.locator('#lostCopy, #missing, #openExplore, .code')).toHaveCount(0);
+    }
+    expect((await request.get('https://learnvedicmath.com/')).status()).toBe(200);
+
+    // Kid mode has its own words
+    await page.goto('/vedic-math/?kid');
+    await expect(page.locator('h1 .kid')).toBeVisible();
+    await expect(page.locator('h1 .kid')).toHaveText('Vedic Math has a new home!');
+
+    // Every other missing page keeps the plain 404, even with the words in its address
+    await page.goto('/no-such-page-e2e/vedic-math/');
+    await expect(page).toHaveTitle(/Page not found/);
+    await expect(page.locator('#movedCopy')).toHaveCount(0);
+    await expect(page.locator('h1 .pro')).toHaveText('This page does not exist.');
+    await page.goto('/vedic-mathematics/');
+    await expect(page.locator('#movedCopy')).toHaveCount(0);
+  });
+
   test('404 page loads cleanly (only the 404 itself fails)', async ({ page, issues }) => {
     await page.goto('/no-such-page-e2e/', { waitUntil: 'load' });
     await page.waitForTimeout(1500);

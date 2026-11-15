@@ -38,7 +38,7 @@ What the build does:
 It fails if the source carries stamps (a ?v= on those scripts, a VERSION other than 'dev', or
 a Content-Security-Policy <meta>), so they cannot creep back into git.
 
-Learn Vedic Math is its own site (https://learnvedicmath.com/) with its own repo (sbmadhav/vedic-math) and build; that repo also owns /vedic-math/ here.
+Learn Vedic Math is its own site (https://learnvedicmath.com/) with its own repo (sbmadhav/vedic-math) and build.
 """
 import argparse, base64, fnmatch, hashlib, html.parser, json, pathlib, re, shutil, subprocess, sys
 

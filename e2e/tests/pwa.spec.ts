@@ -69,10 +69,10 @@ test.describe('Service worker and offline', () => {
 
   test('leaves /state-of-voice-agents/ and /vedic-math/ to the network', async ({ page, context }) => {
     await controlled(page);
-    // /vedic-math/ is the old address of Learn Vedic Math, and the vedic-math repo owns what it answers: its
-    // "moved" page (which hands a visitor's progress over to learnvedicmath.com), later a redirect, and 404
-    // while neither is published. So it is probed with a fetch, never visited: the moved page must not run in
-    // a test (it would look like a hand-off), and any status is fine as long as the root worker stays out of it.
+    // /vedic-math/ is the retired address of Learn Vedic Math. Nothing is published there now (the 404 page
+    // answers and links to learnvedicmath.com), but the path is not this site's to cache: if the vedic-math
+    // repo ever publishes there again, the root worker must stay out of it. So it is probed with a fetch, and
+    // any status is fine.
     const probe = '/vedic-math/e2e-probe';
     const [probed] = await Promise.all([
       page.waitForResponse(r => new URL(r.url()).pathname === probe, { timeout: 15_000 }).catch(() => null),

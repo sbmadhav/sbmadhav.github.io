@@ -6,9 +6,9 @@
 
    Scope: registered from the home page with scope "/". It leaves /state-of-voice-agents/ and
    /vedic-math/ alone (those paths belong to their own repos, so this file cannot version them)
-   and every other origin's requests. /vedic-math/ is the old address of Learn Vedic Math: the
-   vedic-math repo publishes its "moved" page there (it hands a visitor's progress over to
-   learnvedicmath.com) and later a redirect, so nothing under it may ever come from this cache.
+   and every other origin's requests. /vedic-math/ is the retired address of Learn Vedic Math:
+   nothing is published there now (404.html answers and links to learnvedicmath.com). It stays on
+   this list so that nothing under it ever comes from this cache, whatever answers there later.
    /design-system/ is also another repo (sbmadhav/design-system) but it is precached like the
    rest, because the pages need tokens.css, components.css and header.js offline (the pinned
    /design-system/v/<version>/ copies the pages link, plus the unversioned latest for the offline
