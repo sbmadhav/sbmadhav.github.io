@@ -151,6 +151,24 @@ test.describe('Journey', () => {
     await expect(page.locator('#detail h3')).toHaveText('Problem Solvers');
     await expect(levels.nth(2).locator('.nm')).toHaveText('Sneaker World');
   });
+
+  test('cloud experience names both AWS and Google Cloud, without durations', async ({ page }) => {
+    await page.goto('/#journey');
+    // Toolkit chips and the platform card
+    const chips = page.locator('.powerups .pu');
+    await expect(chips.filter({ hasText: /^AWS$/ })).toHaveCount(1);
+    await expect(chips.filter({ hasText: /^Google Cloud$/ })).toHaveCount(1);
+    await expect(page.locator('#work .card p.pro', { hasText: 'cloud-native platforms' })).toContainText('AWS and Google Cloud');
+    // The AWS roles (Nike, Capital One) and the Google Cloud role (Lowe's) say which cloud
+    const levels = page.locator('#levels .level');
+    const cloudOf = async (i: number) => { await levels.nth(i).click(); return page.locator('#detail li').allTextContents(); };
+    for (const i of [2, 4]) {
+      const bullets = (await cloudOf(i)).filter(t => t.includes('AWS'));
+      expect(bullets, `level ${i + 1} mentions AWS`).toHaveLength(1);
+      expect(bullets[0]).not.toMatch(/\d+\s*\+?\s*(year|yr)/i);
+    }
+    expect((await cloudOf(1)).some(t => t.includes('Google Cloud'))).toBe(true);
+  });
 });
 
 test.describe('Say hi', () => {
