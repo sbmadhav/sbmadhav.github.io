@@ -16,7 +16,7 @@ Only the owner sees the report. This is a personal project kept by one person, s
 
 ## What is in scope
 
-The pages at https://sbmadhav.com that this repo serves, its service worker (`sw.js`), and the shared scripts other repos load from it (`/assets/explore.js`, `/assets/analytics.js` and the vendored GoatCounter `/assets/count.js`). Pages under /design-system/ and /state-of-voice-agents/ come from their own repos; report those there.
+The pages at https://sbmadhav.com that this repo serves, its service worker (`sw.js`), and the shared scripts other repos load from it (`/assets/explore.js`, `/assets/analytics.js` and the vendored GoatCounter `/assets/count.js`). Pages under /design-system/, /state-of-voice-agents/ and /vedic-math/ (the old address of Learn Vedic Math) come from their own repos; report those there.
 
 Only the live site, built from the default branch, is supported. Older commits are not patched.
 

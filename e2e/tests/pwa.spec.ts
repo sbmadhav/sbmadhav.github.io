@@ -2,7 +2,7 @@ import { test, expect, isHttps } from './fixtures';
 import type { Page } from '@playwright/test';
 
 /* The root service worker (sw.js): registers from the home page, makes it work offline,
-   and leaves /state-of-voice-agents/ (another repo) to the network.
+   and leaves /state-of-voice-agents/ and /vedic-math/ (other repos) to the network.
    Chromium only: Playwright reports service-worker responses and offline mode reliably there.
    Needs https (the home page registers the worker only on https). */
 
@@ -67,26 +67,34 @@ test.describe('Service worker and offline', () => {
     }
   });
 
-  test('leaves /state-of-voice-agents/ to the network', async ({ page, context }) => {
+  test('leaves /state-of-voice-agents/ and /vedic-math/ to the network', async ({ page, context }) => {
     await controlled(page);
-    for (const path of ['/state-of-voice-agents/']) {
-      const res = await page.goto(path, { waitUntil: 'load' });
-      expect(res?.status(), path).toBe(200);
-      expect(res?.fromServiceWorker(), `${path} must not come from the root worker`).toBe(false);
-    }
-    // Nothing from that path ends up in the root worker's cache
+    // /vedic-math/ is the old address of Learn Vedic Math, and the vedic-math repo owns what it answers: its
+    // "moved" page (which hands a visitor's progress over to learnvedicmath.com), later a redirect, and 404
+    // while neither is published. So it is probed with a fetch, never visited: the moved page must not run in
+    // a test (it would look like a hand-off), and any status is fine as long as the root worker stays out of it.
+    const probe = '/vedic-math/e2e-probe';
+    const [probed] = await Promise.all([
+      page.waitForResponse(r => new URL(r.url()).pathname === probe, { timeout: 15_000 }).catch(() => null),
+      page.evaluate(p => fetch(p, { redirect: 'manual' }).then(() => null, () => null), probe),
+    ]);
+    expect(probed === null || !probed.fromServiceWorker(), `${probe} must not come from the root worker`).toBe(true);
+    const res = await page.goto('/state-of-voice-agents/', { waitUntil: 'load' });
+    expect(res?.status()).toBe(200);
+    expect(res?.fromServiceWorker(), 'the report must not come from the root worker').toBe(false);
+    // Nothing from those paths ends up in the root worker's cache
     const leaked = await page.evaluate(async () => {
       const out: string[] = [];
       for (const k of (await caches.keys()).filter(k => k.startsWith('madhav-'))) {
         for (const r of await (await caches.open(k)).keys()) {
           const p = new URL(r.url).pathname;
-          if (p.startsWith('/state-of-voice-agents')) out.push(p);
+          if (p.startsWith('/vedic-math') || p.startsWith('/state-of-voice-agents')) out.push(p);
         }
       }
       return out;
     });
     expect(leaked).toEqual([]);
-    // And offline, the root worker does not pretend to serve it
+    // And offline, the root worker does not pretend to serve them
     await context.setOffline(true);
     try {
       const res = await page.goto('/state-of-voice-agents/').catch(() => null);

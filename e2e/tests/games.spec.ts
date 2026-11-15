@@ -213,6 +213,8 @@ test.describe('Journey', () => {
     await expect(detail).toContainText('Core Compliance');
     await expect(detail).toContainText('compliance testing, corporate surveillance, and corporate integrity and ethics');
     await expect(detail).toContainText('about 70');
+    // The tools are named: the production model family, the coding tool and the spec framework
+    for (const name of ['Nemotron', 'Claude Code', 'MCP', 'OpenSpec']) await expect(detail).toContainText(name);
     // Primary Venture Partners is an ongoing honorary role, not part of the Capital One job
     await expect(detail).not.toContainText('Primary Venture Partners');
     const facts = page.locator('#journey .facts');
