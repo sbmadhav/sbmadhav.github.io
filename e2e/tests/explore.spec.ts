@@ -7,7 +7,7 @@ const PAGES = [
   { path: '/design-system/', repo: 'design-system', title: /Design system/ },
 ];
 // My sites on other domains: listed with the pages, opened in a new tab, no repo mark.
-// Learn Vedic Math used to be /vedic-math/ here; that path still belongs to the vedic-math repo (its moved page),
+// Learn Vedic Math used to be /vedic-math/ here. That address is retired (the 404 page there says it moved),
 // so the menu links to the new site and never to the old address.
 const OUTSIDE = [
   { href: 'https://learnvedicmath.com/', title: /Learn Vedic Math/ },

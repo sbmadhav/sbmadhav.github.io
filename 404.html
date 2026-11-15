@@ -46,7 +46,8 @@
 
 <main class="lost" id="main" tabindex="-1">
   <div class="md-wrap">
-    <div>
+    <!-- Any missing page. The script below removes whichever of the two blocks does not apply. -->
+    <div id="lostCopy">
       <span class="md-tag md-tag--coral"><span class="pro">Page not found</span><span class="kid">Lost in space</span></span>
       <p class="code" aria-hidden="true">404</p>
       <h1 class="md-heading"><span class="pro">This page does not exist.</span><span class="kid">Bolt flew off the map!</span></h1>
@@ -55,6 +56,16 @@
       <div class="actions">
         <a class="md-btn md-btn--primary" href="/"><span class="pro">Go to the home page</span><span class="kid">Fly home</span></a>
         <button class="md-btn" type="button" id="openExplore"><span class="pro">See every page</span><span class="kid">Open the star map</span></button>
+      </div>
+    </div>
+    <!-- The old Vedic Math address (anything under /vedic-math/): the app has its own site now -->
+    <div id="movedCopy" hidden>
+      <span class="md-tag md-tag--teal"><span class="pro">Moved</span><span class="kid">New home</span></span>
+      <h1 class="md-heading"><span class="pro">Vedic Math has moved.</span><span class="kid">Vedic Math has a new home!</span></h1>
+      <p class="md-lede"><span class="pro">It now lives on its own site, learnvedicmath.com. This old address is no longer used.</span><span class="kid">The math tricks and games live at learnvedicmath.com now.</span></p>
+      <div class="actions">
+        <a class="md-btn md-btn--primary" href="https://learnvedicmath.com/"><span class="pro">Go to learnvedicmath.com</span><span class="kid">Fly to the math games</span></a>
+        <a class="md-btn" href="/"><span class="pro">Go to the home page</span><span class="kid">Fly home</span></a>
       </div>
     </div>
     <img class="bolt" src="/design-system/icons/bolt.svg" alt="" width="160" height="170">
@@ -71,12 +82,20 @@
   const setKid = on => { document.body.classList.toggle('kidmode', on); kidBtn.setAttribute('aria-checked', String(on)); store.set('kidmode', on ? '1' : '0'); };
   kidBtn.addEventListener('click', () => setKid(!document.body.classList.contains('kidmode')));
   setKid(new URLSearchParams(location.search).has('kid') || store.get('kidmode') === '1');
-  // Show the address that was asked for, and open the Explore menu from the page
-  const missing = document.getElementById('missing');
-  missing.querySelector('code').textContent = location.pathname;
-  missing.hidden = false;
-  document.getElementById('openExplore').addEventListener('click', () => document.getElementById('exploreBtn').click());
-  addEventListener('load', () => { if (window.siteTrack) window.siteTrack('404' + location.pathname, 'Page not found'); }, { once: true });
+  // The old Vedic Math address: say that it moved and link to the new site, instead of the plain 404 copy
+  const moved = /^\/vedic-math(\/|$)/i.test(location.pathname);
+  document.getElementById(moved ? 'lostCopy' : 'movedCopy').remove();
+  if (moved) {
+    document.getElementById('movedCopy').hidden = false;
+    document.title = 'Vedic Math has moved · Madhav';
+  } else {
+    // Show the address that was asked for, and open the Explore menu from the page
+    const missing = document.getElementById('missing');
+    missing.querySelector('code').textContent = location.pathname;
+    missing.hidden = false;
+    document.getElementById('openExplore').addEventListener('click', () => document.getElementById('exploreBtn').click());
+  }
+  addEventListener('load', () => { if (window.siteTrack) window.siteTrack('404' + location.pathname, moved ? 'Old Vedic Math address' : 'Page not found'); }, { once: true });
 })();
 </script>
 <script src="/design-system/v/2.1.0/header.js" integrity="sha384-nTm0mOyr+DuwSINMZKLkdbcMopN7QpSn5ZRW0ic3Zw9gBT5c6itkwqqJaXkVhkUn" crossorigin="anonymous" defer></script>

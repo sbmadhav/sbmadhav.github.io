@@ -1,5 +1,5 @@
-# Local symlinks to sibling checkouts of sbmadhav/vedic-math and sbmadhav/design-system. Both paths belong to those
-# repos in production, so nothing may be committed under them here (see CLAUDE.md on /vedic-math/).
+# /design-system is a local symlink to a sibling checkout of sbmadhav/design-system (that repo serves the path in
+# production). /vedic-math is the retired address of Learn Vedic Math: nothing is committed under it (see CLAUDE.md).
 /vedic-math
 /design-system
 _site/
