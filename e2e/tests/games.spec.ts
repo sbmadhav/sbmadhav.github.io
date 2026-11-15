@@ -7,18 +7,51 @@ test.describe('Brain Lab', () => {
     await expect(chips).toHaveCount(4);
     await chips.first().click();
     await expect(chips.first()).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#thought')).toContainText('route: "billing"');
-    await expect(page.locator('.lane.pick')).toHaveText('Billing agent');
-    await expect(page.locator('#answer')).toContainText('refund');
+    await expect(page.locator('#thought')).toContainText('route: "scheduling"');
+    await expect(page.locator('.lane.pick')).toHaveText('Scheduling agent');
+    await expect(page.locator('#answer')).toContainText('openings next Tuesday');
+  });
+
+  test('the grown-up examples are a clinic front desk, not a bank', async ({ page }) => {
+    await page.goto('/#lab');
+    await expect(page.locator('#lanes .lane')).toHaveText(['Scheduling agent', 'Billing agent', 'Human handoff']);
+    await expect(page.locator('#lab h3 .pro')).toHaveText('Try a patient request');
+    const chips = await page.locator('#chips .chip').allTextContents();
+    expect(chips.join(' ')).not.toMatch(/card|balance|account|charged twice/i);
   });
 
   test('a typed question is routed by keyword', async ({ page }) => {
     await page.goto('/#lab');
-    await page.locator('#askInput').fill('I am really upset about this');
-    await page.locator('#askForm button[type="submit"]').click();
-    await expect(page.locator('.lane.pick')).toHaveText('Care agent');
-    await expect(page.locator('#answer')).toContainText('opened a case');
+    const ask = async (q: string) => {
+      await page.locator('#askInput').fill(q);
+      await page.locator('#askForm button[type="submit"]').click();
+    };
+    await ask('I am really upset about this');
+    await expect(page.locator('.lane.pick')).toHaveText('Human handoff');
+    await expect(page.locator('#answer')).toContainText('connecting you to a person');
     await expect(page.locator('#askInput')).toHaveValue('');
+    await ask('How much will my copay be?');
+    await expect(page.locator('.lane.pick')).toHaveText('Billing agent');
+    await ask('Can I book a visit for Friday?');
+    await expect(page.locator('.lane.pick')).toHaveText('Scheduling agent');
+  });
+
+  test('anything urgent or unrecognised goes to a person', async ({ page }) => {
+    await page.goto('/#lab');
+    const ask = async (q: string) => {
+      await page.locator('#askInput').fill(q);
+      await page.locator('#askForm button[type="submit"]').click();
+    };
+    await ask('I have chest pain right now');
+    await expect(page.locator('.lane.pick')).toHaveText('Human handoff');
+    await expect(page.locator('#thought')).toContainText('handoff.urgent');
+    await expect(page.locator('#answer')).toContainText('call 911');
+    await expect(page.locator('#answer')).toContainText('nurse');
+    // "explain" and "complain" hold the letters of other words; they are not urgent
+    await ask('Please explain the weather');
+    await expect(page.locator('.lane.pick')).toHaveText('Human handoff');
+    await expect(page.locator('#answer')).toContainText('passing along what you asked');
+    await expect(page.locator('#thought')).not.toContainText('handoff.urgent');
   });
 
   test('kid mode has kid questions and does the math', async ({ page }) => {
@@ -72,8 +105,10 @@ test.describe('Design Lab (grown-up mode)', () => {
   test('switching scenario and reset clear the picks', async ({ page }) => {
     await page.goto('/#play');
     await page.locator('.sdc').first().click();
-    await page.locator('#sdTabs .chip', { hasText: 'The Bank Voice Agent' }).click();
-    await expect(page.locator('#sdTitle')).toHaveText('The Bank Voice Agent');
+    await expect(page.locator('#sdTabs .chip')).toHaveText(['The Ticket Drop', 'The Clinic Voice Agent', 'The App Went Viral']);
+    await page.locator('#sdTabs .chip', { hasText: 'The Clinic Voice Agent' }).click();
+    await expect(page.locator('#sdTitle')).toHaveText('The Clinic Voice Agent');
+    await expect(page.locator('#sdBrief')).toContainText('appointments for a clinic');
     await expect(page.locator('#sdSpent')).toHaveText('0');
     await page.locator('.sdc').first().click();
     await page.locator('#sdReset').click();
@@ -158,7 +193,7 @@ test.describe('Journey', () => {
     const chips = page.locator('.powerups .pu');
     await expect(chips.filter({ hasText: /^AWS$/ })).toHaveCount(1);
     await expect(chips.filter({ hasText: /^Google Cloud$/ })).toHaveCount(1);
-    await expect(page.locator('#work .card p.pro', { hasText: 'cloud-native platforms' })).toContainText('AWS and Google Cloud');
+    await expect(page.locator('#work .card p.pro', { hasText: 'corporate surveillance' })).toContainText('built on AWS');
     // The AWS roles (Nike, Capital One) and the Google Cloud role (Lowe's) say which cloud
     const levels = page.locator('#levels .level');
     const cloudOf = async (i: number) => { await levels.nth(i).click(); return page.locator('#detail li').allTextContents(); };
@@ -168,6 +203,44 @@ test.describe('Journey', () => {
       expect(bullets[0]).not.toMatch(/\d+\s*\+?\s*(year|yr)/i);
     }
     expect((await cloudOf(1)).some(t => t.includes('Google Cloud'))).toBe(true);
+  });
+
+  test('the current level says what I lead; advising and education sit under the toolkit', async ({ page }) => {
+    await page.goto('/#journey');
+    const detail = page.locator('#detail');
+    await expect(detail.locator('h3')).toHaveText('Capital One');
+    await expect(detail.locator('li')).toHaveCount(4);
+    await expect(detail).toContainText('Core Compliance');
+    await expect(detail).toContainText('compliance testing, corporate surveillance, and corporate integrity and ethics');
+    await expect(detail).toContainText('about 70');
+    // Primary Venture Partners is an ongoing honorary role, not part of the Capital One job
+    await expect(detail).not.toContainText('Primary Venture Partners');
+    const facts = page.locator('#journey .facts');
+    await expect(facts.locator('dt')).toHaveCount(4);
+    await expect(facts).toContainText('Honorary Expert at Primary Venture Partners, advising founders since 2024');
+    await expect(facts).toContainText('Anna University');
+    await expect(facts).toContainText('English, Tamil and Hindi');
+    await expect(page.locator('#journey')).not.toContainText('2024 to 2026');
+    // The consulting and Lowe's dates overlap, so both levels say why
+    const levels = page.locator('#levels .level');
+    await levels.nth(0).click();
+    await expect(detail).toContainText("the last stretch on the Lowe's account");
+    await levels.nth(1).click();
+    await expect(detail).toContainText('through Publicis Sapient, then joined in-house');
+    // What's next: the voice agent and more games
+    await levels.nth(5).click();
+    await expect(detail).toContainText('voice agent of my own');
+    await expect(detail).toContainText('More games');
+  });
+
+  test('the toolkit is short and the team numbers are in the stats', async ({ page }) => {
+    await page.goto('/#journey');
+    expect(await page.locator('.powerups .pu').count()).toBeLessThanOrEqual(10);
+    const stats = page.locator('#journey .stats .stat');
+    await expect(stats).toHaveCount(4);
+    await expect(stats.nth(1)).toContainText('~70');
+    await expect(stats.nth(2)).toContainText('3 to 21');
+    await expect(stats.nth(3).locator('.v .pro')).toHaveText('$70M+');
   });
 });
 

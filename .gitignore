@@ -1,5 +1,4 @@
-# Local symlinks to sibling checkouts of sbmadhav/vedic-math and sbmadhav/design-system (served under this domain in production)
-/vedic-math
+# Local symlink to a sibling checkout of sbmadhav/design-system (served under this domain in production)
 /design-system
 _site/
 
