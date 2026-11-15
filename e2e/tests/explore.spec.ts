@@ -4,10 +4,14 @@ import { test, expect, openExplore } from './fixtures';
 const PAGES = [
   { path: '/', repo: 'sbmadhav.github.io', title: /Home/ },
   { path: '/state-of-voice-agents/', repo: 'state-of-voice-agents', title: /Voice agents/ },
-  { path: '/vedic-math/', repo: 'vedic-math', title: /Vedic Math/ },
   { path: '/design-system/', repo: 'design-system', title: /Design system/ },
 ];
-const SECTIONS = ['work', 'lab', 'bugs', 'play', 'journey', 'hello'];
+// My sites on other domains: listed with the pages, opened in a new tab, no repo mark.
+// Learn Vedic Math used to be /vedic-math/ here; that address now answers 404.
+const OUTSIDE = [
+  { href: 'https://learnvedicmath.com/', title: /Learn Vedic Math/ },
+];
+const SECTIONS = ['work', 'journey', 'projects', 'views', 'lab', 'bugs', 'play', 'hello'];
 
 test.describe('Explore menu', () => {
   test('opens and closes with the button, the close button, Esc and the backdrop', async ({ page, browserName }) => {
@@ -53,9 +57,10 @@ test.describe('Explore menu', () => {
   test('lists every page, section and outside link', async ({ page }) => {
     await page.goto('/');
     const dlg = await openExplore(page);
-    await expect(dlg.locator('.xp-page')).toHaveCount(PAGES.length);
+    await expect(dlg.locator('.xp-page')).toHaveCount(PAGES.length + OUTSIDE.length);
     for (const p of PAGES) await expect(dlg.locator(`.xp-page[href="${p.path}"]`)).toContainText(p.title);
     await expect(dlg.locator('.xp-sec')).toHaveCount(SECTIONS.length);
+    for (const id of SECTIONS) await expect(dlg.locator(`.xp-sec[href="#${id}"]`)).toHaveCount(1);
     await expect(dlg.locator('.xp-link[href="https://www.linkedin.com/in/sbmadhav/"]')).toHaveAttribute('target', '_blank');
     await expect(dlg.locator('.xp-link[href="https://github.com/sbmadhav"]')).toHaveAttribute('target', '_blank');
   });
@@ -66,6 +71,23 @@ test.describe('Explore menu', () => {
       expect(r.status(), p.path).toBe(200);
       expect(await r.text(), `${p.path} loads explore.js`).toMatch(/src="\/?assets\/explore\.js/);
     }
+    for (const o of OUTSIDE) expect((await request.get(o.href)).status(), o.href).toBe(200);
+  });
+
+  test('sites on another domain open in a new tab, say so, and have no repo mark', async ({ page }) => {
+    await page.goto('/');
+    const dlg = await openExplore(page);
+    for (const o of OUTSIDE) {
+      const link = dlg.locator(`.xp-page[href="${o.href}"]`);
+      await expect(link).toContainText(o.title);
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAttribute('rel', /noopener/);
+      await expect(link).toContainText('(opens in a new tab)');
+      await expect(link).not.toHaveAttribute('aria-current', /./);
+      await expect(dlg.locator('.xp-row', { has: link }).locator('a.xp-repo')).toHaveCount(0);
+    }
+    // The old address under this domain is gone from the menu
+    await expect(dlg.locator('a[href*="/vedic-math"]')).toHaveCount(0);
   });
 
   for (const p of PAGES) {
@@ -95,7 +117,7 @@ test.describe('Explore menu', () => {
     const hoverNone = await page.evaluate(() => matchMedia('(hover: none)').matches);
     test.skip(hoverNone, 'Touch screens show the mark faintly all the time (no hover)');
     const dlg = await openExplore(page);
-    const row = dlg.locator('.xp-row').nth(2);
+    const row = dlg.locator('.xp-row', { has: page.locator('.xp-page[href="/state-of-voice-agents/"]') });
     const mark = row.locator('.xp-repo');
     const opacity = () => mark.evaluate(el => +getComputedStyle(el).opacity);
     await expect.poll(opacity).toBe(0);

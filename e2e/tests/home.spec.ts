@@ -33,17 +33,83 @@ test.describe('Home page', () => {
     await page.goto('/');
     // Five links: with six, the header did not hold the controls inside the content width
     await expect(page.locator('header .md-nav a')).toHaveCount(5);
-    for (const id of ['work', 'lab', 'bugs', 'play', 'journey']) {
+    for (const id of ['work', 'journey', 'projects', 'views', 'games']) {
       await page.locator(`header .md-nav a[href="#${id}"]`).click();
       await expect(page).toHaveURL(new RegExp(`#${id}$`));
       await expect(page.locator(`#${id}`)).toBeInViewport();
     }
   });
 
-  test('hero call-to-action buttons jump to the games', async ({ page }) => {
+  test('hero call-to-action buttons lead with the work; one goes to the games', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.hero .cta a[href="#bugs"]').click();
+    const cta = page.locator('.hero .cta a');
+    expect(await cta.evaluateAll(as => as.map(a => a.getAttribute('href')))).toEqual(['#journey', '#projects', '#games', '#hello']);
+    await page.locator('.hero .cta a[href="#games"]').click();
+    await expect(page.locator('#games')).toBeInViewport();
+    await page.locator('#games .cta a[href="#bugs"]').click();
     await expect(page.locator('#bugs')).toBeInViewport();
+  });
+
+  test('the work comes before the games: section order', async ({ page }) => {
+    await page.goto('/');
+    const ids = await page.locator('main > section').evaluateAll(ss => ss.map(s => s.id));
+    expect(ids).toEqual(['top', 'work', 'journey', 'projects', 'views', 'games', 'lab', 'bugs', 'play', 'hello']);
+  });
+
+  test('What I do: four pillars that say what is the day job and what is not', async ({ page }) => {
+    await page.goto('/');
+    const cards = page.locator('#work .card');
+    await expect(cards).toHaveCount(4);
+    await expect(cards.locator('h3 .pro')).toHaveText(['Leading teams', 'Compliance engineering', 'Agentic engineering', 'Voice agents']);
+    // Team sizes are on the page, and the voice agent work is dated to the earlier role
+    await expect(cards.nth(0).locator('p.pro')).toContainText('about 70');
+    await expect(cards.nth(0).locator('p.pro')).toContainText('3 to 21');
+    await expect(cards.nth(0).locator('p.pro')).toContainText('2 to 25');
+    await expect(cards.nth(3).locator('p.pro')).toContainText('At Ascension I built GRACE');
+    await expect(cards.nth(3).locator('p.pro')).toContainText('on my own time');
+  });
+
+  test('Projects and writing: four links to my own work, the outside one in a new tab', async ({ page, request }) => {
+    await page.goto('/');
+    const cards = page.locator('#projects a.proj');
+    expect(await cards.evaluateAll(as => as.map(a => a.getAttribute('href')))).toEqual(['/state-of-voice-agents/', 'https://learnvedicmath.com/', '#games', '/design-system/']);
+    const out = page.locator('#projects a.proj[href="https://learnvedicmath.com/"]');
+    await expect(out).toHaveAttribute('target', '_blank');
+    await expect(out).toHaveAttribute('rel', /noopener/);
+    await expect(out).toContainText('(opens in a new tab)');
+    for (const href of ['/state-of-voice-agents/', '/design-system/', 'https://learnvedicmath.com/']) expect((await request.get(href)).status(), href).toBe(200);
+    // No link anywhere on the page to the old Vedic Math address
+    await expect(page.locator('a[href*="/vedic-math"]')).toHaveCount(0);
+    await page.locator('#projects a.proj[href="#games"]').click();
+    await expect(page.locator('#games')).toBeInViewport();
+  });
+
+  test('What I believe: four views, marked as my own, linked to the demo and the report', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#views .beliefs li')).toHaveCount(4);
+    await expect(page.locator('#views .sec-head p.pro')).toContainText("not my employer's");
+    await page.locator('#views .beliefs p.pro a[href="#lab"]').click();
+    await expect(page.locator('#lab')).toBeInViewport();
+    await expect(page.locator('#views .beliefs p.pro a[href="/state-of-voice-agents/"]')).toHaveCount(1);
+  });
+
+  test('the games band says why the games and kid mode exist', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#games p.pro')).toContainText('Building games is my passion');
+    await expect(page.locator('#games p.pro')).toContainText('Kid mode exists for the same reason');
+    expect(await page.locator('#games .cta a').evaluateAll(as => as.map(a => a.getAttribute('href')))).toEqual(['#lab', '#bugs', '#play']);
+  });
+
+  test('kid mode has its own copy in the new sections', async ({ page }) => {
+    await page.goto('/?kid');
+    await expect(page.locator('#projects h2 .kid')).toHaveText('Things I made');
+    await expect(page.locator('#projects h2 .pro')).toBeHidden();
+    await expect(page.locator('#views .beliefs p.kid').first()).toBeVisible();
+    await expect(page.locator('#views .beliefs p.pro').first()).toBeHidden();
+    await expect(page.locator('#games p.kid')).toBeVisible();
+    await expect(page.locator('#journey .facts dd .kid').first()).toBeVisible();
+    await expect(page.locator('#games .cta a[href="#play"] .kid')).toBeVisible();
+    await expect(page.locator('#games .cta a[href="#play"] .kid')).toHaveText('Robot Maze');
   });
 
   test('kid mode swaps .pro and .kid copy and persists across reload', async ({ page }) => {

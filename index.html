@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Madhav Srinivasan | Director of Software Engineering</title>
-<meta name="description" content="Madhav Srinivasan, Director of Software Engineering. Building AI agents, voice AI, and platforms for banking and healthcare. A site grown-ups and kids can both enjoy.">
+<meta name="description" content="Madhav Srinivasan, Director of Software Engineering. I lead compliance engineering teams, work on agentic engineering, and write about voice agents. A site grown-ups and kids can both enjoy.">
 <meta property="og:title" content="Madhav Srinivasan | Director of Software Engineering">
-<meta property="og:description" content="Building AI helpers for places where trust matters. Try the Brain Lab and the Bug Hunt.">
+<meta property="og:description" content="Engineering leader working on compliance technology, agentic engineering and voice agents. See the work, read the monthly report, or play a game.">
 <meta property="og:image" content="https://sbmadhav.com/assets/profile.jpg">
 <link rel="canonical" href="https://sbmadhav.com/">
 <meta property="og:url" content="https://sbmadhav.com/">
@@ -140,6 +140,32 @@ section{padding:var(--space-section) 0;scroll-margin-top:70px}
 .card .ic svg{width:30px;height:30px}
 .card h3{font:var(--text-card-title);letter-spacing:var(--text-card-title-tracking);margin-bottom:var(--space-1-5)}
 .card p{margin:0;color:var(--ink-muted);font-size:var(--text-small-size)}
+
+/* Projects: a card that is one link */
+.proj{display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.proj .go{margin-top:auto;padding-top:var(--space-3-5);font-weight:700;font-size:var(--text-small-size);color:var(--ink);display:inline-flex;align-items:center;gap:var(--space-1-5)}
+.proj .go svg{width:16px;height:16px;flex:none;transition:transform .15s}
+.proj:hover .go svg{transform:translateX(3px)}
+
+/* Point of view */
+.beliefs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-7) var(--space-9)}
+@media (max-width:760px){.beliefs{grid-template-columns:1fr;gap:var(--space-6)}}
+.beliefs li{border-left:4px solid var(--b,var(--teal));padding-left:var(--space-4-5)}
+.beliefs h3{font:var(--text-title);letter-spacing:var(--text-title-tracking)}
+.beliefs p{margin:var(--space-2) 0 0;color:var(--ink-muted);max-width:34em}
+.beliefs a{color:var(--ink);font-weight:700}
+
+/* Journey: the short facts under the toolkit */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5);margin:var(--space-7) 0 0;padding-top:var(--space-6);border-top:1px solid var(--line)}
+@media (max-width:860px){.facts{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.facts{grid-template-columns:1fr}}
+.facts dt{font:var(--text-kicker);color:var(--ink-muted);text-transform:uppercase;letter-spacing:var(--text-kicker-tracking)}
+.facts dd{margin:var(--space-1) 0 0;font-size:var(--text-small-size)}
+.sub-h{font:var(--text-title);letter-spacing:var(--text-title-tracking);margin:var(--space-9) 0 var(--space-3-5)}
+
+/* Games: the short band that introduces the three games */
+.games-intro{padding:var(--space-9) 0}
+.games-intro .sec-head{margin-bottom:0}
 
 /* Brain Lab */
 .lab{display:grid;grid-template-columns:.9fr 1.1fr;gap:var(--space-7);align-items:start}
@@ -401,6 +427,9 @@ html.motion-paused .reveal{opacity:1;transform:none}
     <symbol id="i-case" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 10V7.5A2.5 2.5 0 0 1 14.5 5h3A2.5 2.5 0 0 1 20 7.5V10M4 17.5h24" fill="none" stroke="currentColor" stroke-width="2.4"/><rect x="13.5" y="15.5" width="5" height="4" rx="1" fill="currentColor"/></symbol>
     <symbol id="i-tools" viewBox="0 0 32 32"><g transform="rotate(-35 16 16)"><path d="M6 6h13c3.2 0 5.8 1.8 6.8 4.6H19V13H6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><rect x="10.5" y="13" width="5" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/></g><path d="M23 24.5l3 3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M20.5 22l2.5 2.5" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></symbol>
     <symbol id="i-sneaker" viewBox="0 0 32 32"><path d="M3 21.5V15c0-1.4.8-2.6 2-3.2L9.5 9.5c1-.5 2.2 0 2.6 1l1.2 2.7c2.7 2.3 7 3.6 11.4 4 2.6.3 4.3 1.9 4.3 4.3H3z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/><path d="M3 21.5h26v2.2c0 .9-.7 1.6-1.6 1.6H4.6c-.9 0-1.6-.7-1.6-1.6z" fill="currentColor" opacity=".35" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/><path d="M11 13l2.3-1.2M13 15.5l2.4-1.2M15.5 17.4l2.3-1.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-team" viewBox="0 0 32 32"><circle cx="16" cy="11" r="4.4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8.5 26c0-4.4 3.2-7.6 7.5-7.6s7.5 3.2 7.5 7.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="6" cy="14" r="2.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M2.5 23.5c0-2.5 1.4-4.4 3.6-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="26" cy="14" r="2.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M29.5 23.5c0-2.5-1.4-4.4-3.6-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M9 5H5v14h14v-4M13 5h6v6M19 5l-8 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-bug" viewBox="0 0 64 64"><g stroke="var(--bolt-line)" stroke-width="3" stroke-linecap="round"><path d="M20 26l-9-6M20 34H8M20 42l-9 6M44 26l9-6M44 34h12M44 42l9 6M27 16l-5-7M37 16l5-7"/></g><ellipse cx="32" cy="36" rx="13" ry="16" fill="var(--bolt-accent)" stroke="var(--bolt-line)" stroke-width="3"/><path d="M32 22v29" stroke="var(--bolt-line)" stroke-width="2.5"/><circle cx="32" cy="19" r="8" fill="var(--bolt-line)"/><circle cx="29" cy="18" r="2" fill="var(--bolt-eye)"/><circle cx="35" cy="18" r="2" fill="var(--bolt-eye)"/><circle cx="26" cy="33" r="2.4" fill="var(--bolt-line)"/><circle cx="38" cy="40" r="2.4" fill="var(--bolt-line)"/><circle cx="27" cy="44" r="1.8" fill="var(--bolt-line)"/></symbol>
   </defs>
@@ -410,7 +439,7 @@ html.motion-paused .reveal{opacity:1;transform:none}
 <header class="md-header">
   <div class="md-wrap md-header-in">
     <a class="md-brand" href="/" aria-label="Madhav, home"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="14" width="48" height="40" rx="14" fill="var(--bolt-body)" stroke="var(--bolt-line)" stroke-width="3"/><circle cx="24" cy="34" r="7" fill="var(--bolt-eye)"/><circle cx="40" cy="34" r="7" fill="var(--bolt-eye)"/><circle cx="25" cy="35" r="3" fill="var(--bolt-line)"/><circle cx="41" cy="35" r="3" fill="var(--bolt-line)"/><path d="M32 14V9" stroke="var(--bolt-line)" stroke-width="3"/><circle cx="32" cy="7" r="5" fill="var(--bolt-accent)" stroke="var(--bolt-line)" stroke-width="3"/></svg><span class="md-brand-t"><!-- slot:brand -->Madhav<!-- /slot:brand --></span></a>
-    <!-- slot:nav --><nav class="md-nav" aria-label="Sections"><a href="#work">About</a><a href="#lab">Brain Lab</a><a href="#bugs">Bug Hunt</a><a href="#play"><span class="pro">Design Lab</span><span class="kid">Robot Maze</span></a><a href="#journey">Journey</a></nav><!-- /slot:nav -->
+    <!-- slot:nav --><nav class="md-nav" aria-label="Sections"><a href="#work">About</a><a href="#journey">Journey</a><a href="#projects">Projects</a><a href="#views">Ideas</a><a href="#games">Games</a></nav><!-- /slot:nav -->
     <button type="button" class="xp-btn" id="exploreBtn" aria-label="Explore all pages"><svg class="xp-dots" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7l6 4 6-5M12 11l-3 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".55"/><circle cx="6" cy="7" r="2.4" fill="var(--coral)"/><circle cx="12" cy="11" r="2.4" fill="var(--sun)" stroke="currentColor" stroke-width="1.2"/><circle cx="18" cy="6" r="2.4" fill="var(--teal)"/><circle cx="9" cy="18" r="2.4" fill="var(--sky)"/></svg><span class="xp-lbl"><span class="pro">Explore</span><span class="kid">Star map</span></span></button>
     <button type="button" class="md-icon-btn md-theme" id="themeBtn" aria-label="Switch color scheme" title="Switch color scheme"><svg class="md-theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="var(--sun)" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="md-theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="var(--plum)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="17" cy="5" r="1.2" fill="currentColor"/><circle cx="20.5" cy="9" r=".9" fill="currentColor"/></svg></button>
     <div class="md-header-end"><!-- slot:music --><div class="md-music" role="group" aria-label="Music"><button type="button" class="md-music-btn" id="musicBtn" aria-pressed="false" aria-label="Play music"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l11-2v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="17.5" cy="16" r="2.5" fill="currentColor"/></svg><span class="md-music-lbl" id="trackName">Music</span><span class="md-eq" aria-hidden="true"><i></i><i></i><i></i></span></button><button type="button" class="md-music-next" id="nextTrack" aria-label="Next track" title="Next track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6l8 6-8 6z" fill="currentColor"/><path d="M18 6v12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div><!-- /slot:music --><!-- slot:end --><button type="button" class="md-switch" id="modeToggle" role="switch" aria-checked="false"><span class="tl-long">Explain it like I'm 8</span><span class="tl-short">Kid mode</span><span class="md-track" aria-hidden="true"><span class="md-knob"></span></span></button><!-- /slot:end --></div>
@@ -433,8 +462,8 @@ html.motion-paused .reveal{opacity:1;transform:none}
         <svg width="0.85em" height="0.85em" viewBox="0 0 32 32" style="vertical-align:-0.08em"><path d="M11 17V8a2 2 0 0 1 4 0v7M15 15V6a2 2 0 0 1 4 0v9M19 15V8a2 2 0 0 1 4 0v10c0 5.5-3.6 9.5-8.5 9.5-3.4 0-5.6-1.6-7.4-4.4L4.4 18.6a2 2 0 0 1 3.2-2.4L11 20" fill="var(--bolt-belly)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span></h1>
       <p class="lede">
-        <span class="pro">Engineering executive who has spent 17 years building software, platforms, and engineering organizations across finance, healthcare, retail, and global consumer brands. These days my job is convincing machines to build the software, while convincing humans this was the plan all along.</span>
-        <span class="kid">I teach computers how to listen, think, and help people. I've built things for banks, hospitals, a giant home store, and even a sneaker company!</span>
+        <span class="pro">I have spent 17 years building software and the teams that build it, in banking, healthcare, retail and consumer brands. Today I lead the engineering organization behind Core Compliance at Capital One, where my job is increasingly to convince machines to build the software, while convincing humans this was the plan all along.</span>
+        <span class="kid">I teach computers how to listen, think, and help people. I've built things for banks, hospitals, a giant home store, and even a sneaker company! I also love making games, so I put some here for you.</span>
       </p>
       <div class="name-say">
         <span class="pro">Full name: Brameshmadhav Srinivasan. Most people just say Madhav.</span>
@@ -442,12 +471,12 @@ html.motion-paused .reveal{opacity:1;transform:none}
         <button class="btn sm" id="sayName" aria-label="How to say it: hear Madhav pronounced"><svg aria-hidden="true"><use href="#i-sound"/></svg> How to say it</button>
       </div>
       <div class="cta">
-        <a class="btn primary" href="#lab">
-          <span class="pro">See how my agents think</span><span class="kid">Peek inside a robot brain</span>
+        <a class="btn primary" href="#journey">
+          <span class="pro">See my work</span><span class="kid">See my game levels</span>
         </a>
-        <a class="btn" href="#bugs"><span class="pro">Squash some bugs</span><span class="kid">Play Bug Hunt</span></a>
-        <a class="btn" href="#play"><span class="pro">Try the Design Lab</span><span class="kid">Play Robot Maze</span></a>
-        <a class="btn" href="#hello"><span class="pro">Say hi</span><span class="kid">Say hi</span></a>
+        <a class="btn" href="#projects"><span class="pro">Projects and writing</span><span class="kid">Things I made</span></a>
+        <a class="btn" href="#games">Play a game</a>
+        <a class="btn" href="#hello">Say hi</a>
       </div>
     </div>
 
@@ -487,34 +516,182 @@ html.motion-paused .reveal{opacity:1;transform:none}
     <div class="sec-head reveal">
       <div>
         <span class="tag" style="background:var(--sun)">What I do</span>
-        <h2><span class="pro">Four things I spend my days on</span><span class="kid">My four favorite jobs</span></h2>
+        <h2><span class="pro">Where my time goes</span><span class="kid">My four favorite jobs</span></h2>
+        <p class="pro">The first three are the day job. The fourth is what I keep building on my own time.</p>
       </div>
     </div>
     <div class="grid4">
       <article class="card reveal">
-        <div class="ic" style="background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal)"><svg><use href="#i-agent"/></svg></div>
-        <h3>Agentic AI</h3>
-        <p class="pro">Designing multi-agent systems that route work to the right specialist agent and tools, with guardrails a regulator would sign off on.</p>
-        <p class="kid">Building a team of robot helpers. Each one is great at one job, and they pass the work to whoever is best at it.</p>
-      </article>
-      <article class="card reveal">
-        <div class="ic" style="background:color-mix(in srgb,var(--coral) 18%,transparent);color:var(--coral)"><svg><use href="#i-voice"/></svg></div>
-        <h3>Voice AI</h3>
-        <p class="pro">Built GRACE, a HIPAA-compliant voice agent for patient scheduling, with safe escalation, soft handoffs, and evaluation-first releases.</p>
-        <p class="kid">Helpers you can talk to on the phone, like a friendly voice that actually understands what you mean.</p>
-      </article>
-      <article class="card reveal">
-        <div class="ic" style="background:color-mix(in srgb,var(--sky) 18%,transparent);color:var(--sky)"><svg><use href="#i-ui"/></svg></div>
-        <h3><span class="pro">Frontend &amp; Platform</span><span class="kid">Screens &amp; Pipes</span></h3>
-        <p class="pro">From Lowes.com search to patient apps: React, React Native, micro frontends, and cloud-native platforms on AWS and Google Cloud.</p>
-        <p class="kid">The buttons and screens you tap, plus the hidden pipes that carry everything to the right place, super fast.</p>
+        <div class="ic" style="background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal)"><svg><use href="#i-team"/></svg></div>
+        <h3><span class="pro">Leading teams</span><span class="kid">Team coach</span></h3>
+        <p class="pro">I lead an organization of about 70 at Capital One, through senior managers and senior engineers. Before that I grew teams from 3 to 21 at Lowe's and from 2 to 25 at Ascension, and directed 10+ teams at Nike.</p>
+        <p class="kid">I'm the coach of a big team of builders. I help everyone do their best work, and I help the team grow.</p>
       </article>
       <article class="card reveal">
         <div class="ic" style="background:color-mix(in srgb,var(--plum) 18%,transparent);color:var(--plum)"><svg><use href="#i-shield"/></svg></div>
-        <h3>Responsible AI</h3>
-        <p class="pro">AI governance and compliance built in from day one. Member of the Responsible AI Institute.</p>
-        <p class="kid">Making sure robot helpers are fair, honest, and keep your secrets safe. Good robots follow the rules!</p>
+        <h3><span class="pro">Compliance engineering</span><span class="kid">Rule checkers</span></h3>
+        <p class="pro">My teams build the systems behind compliance testing, corporate surveillance, and corporate integrity and ethics at a bank. All three are regulatory requirements, built on AWS.</p>
+        <p class="kid">Banks have to follow lots of rules. My team builds the computer checkers that make sure the rules are followed.</p>
       </article>
+      <article class="card reveal">
+        <div class="ic" style="background:color-mix(in srgb,var(--sky) 18%,transparent);color:var(--sky)"><svg><use href="#i-agent"/></svg></div>
+        <h3><span class="pro">Agentic engineering</span><span class="kid">Robot coders</span></h3>
+        <p class="pro">My team builds with agentic coding tools, and we are moving to harness engineering: tools connected over MCP and spec-driven development. AI in production is small and deliberate so far, starting in compliance testing.</p>
+        <p class="kid">Robot helpers can write computer code now! My team teaches them how, and people always check their work.</p>
+      </article>
+      <article class="card reveal">
+        <div class="ic" style="background:color-mix(in srgb,var(--coral) 18%,transparent);color:var(--coral)"><svg><use href="#i-voice"/></svg></div>
+        <h3><span class="pro">Voice agents</span><span class="kid">Talking helpers</span></h3>
+        <p class="pro">At Ascension I built GRACE, a HIPAA-compliant voice agent for patient scheduling. That was my last role, and the interest stayed: on my own time I study the field, publish a monthly report, and plan to build my own voice agent for projects like Learn Vedic Math.</p>
+        <p class="kid">Helpers you can talk to on the phone. I built one called GRACE that books doctor visits, and I want to build a new one for my math games.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="tag" style="background:var(--teal);color:var(--on-accent)">The Journey</span>
+        <h2><span class="pro">Career, one level at a time</span><span class="kid">My video game levels</span></h2>
+        <p class="pro">Click a level for the details.</p>
+        <p class="kid">Every job is a new level. Tap one to see what I learned there!</p>
+      </div>
+    </div>
+    <div class="map reveal">
+      <div class="track-line" aria-hidden="true"></div>
+      <div class="levels" role="tablist" id="levels"></div>
+    </div>
+    <div class="detail" id="detail" role="tabpanel" aria-live="polite"></div>
+
+    <div class="stats reveal">
+      <div class="stat"><div class="k"><span class="pro">Years building</span><span class="kid">Years coding</span></div><div class="v">17</div><p><span class="pro">Since 2009, from Java trainee to director</span><span class="kid">Longer than some of you have been alive!</span></p></div>
+      <div class="stat"><div class="k"><span class="pro">Team today</span><span class="kid">My team now</span></div><div class="v">~70</div><p><span class="pro">People in my organization at Capital One</span><span class="kid">Builders I lead right now</span></p></div>
+      <div class="stat"><div class="k"><span class="pro">Teams grown</span><span class="kid">Robot team</span></div><div class="v">2 &rarr; 25</div><p><span class="pro">AI squad at Ascension. Also 3 to 21 at Lowe's</span><span class="kid">From 2 builders to 25 builders</span></p></div>
+      <div class="stat"><div class="k"><span class="pro">Revenue impact</span><span class="kid">Teams led at once</span></div><div class="v"><span class="pro">$70M+</span><span class="kid">10+</span></div><p><span class="pro">Projected annual, from 10+ teams at Nike</span><span class="kid">All around the world</span></p></div>
+    </div>
+
+    <div class="reveal">
+      <h3 class="sub-h"><span class="pro">Power-ups (a.k.a. the toolkit)</span><span class="kid">Power-ups I've collected</span></h3>
+      <div class="powerups">
+        <span class="pu"><i style="background:var(--teal)"></i>Multi-agent systems &amp; MCP</span>
+        <span class="pu"><i style="background:var(--coral)"></i>Voice &amp; conversational AI</span>
+        <span class="pu"><i style="background:var(--plum)"></i>AI evals &amp; governance</span>
+        <span class="pu"><i style="background:var(--sky)"></i>React, TypeScript &amp; Node.js</span>
+        <span class="pu"><i style="background:var(--sky)"></i>Python &amp; Java</span>
+        <span class="pu"><i style="background:var(--sun)"></i>AWS</span>
+        <span class="pu"><i style="background:var(--sun)"></i>Google Cloud</span>
+        <span class="pu"><i style="background:var(--sun)"></i>Platform engineering &amp; DevOps</span>
+        <span class="pu"><i style="background:var(--plum)"></i>Regulated domains: banking &amp; healthcare</span>
+      </div>
+    </div>
+
+    <dl class="facts reveal">
+      <div><dt><span class="pro">Education</span><span class="kid">School</span></dt><dd><span class="pro">B.E. in Electronics and Communication, Anna University</span><span class="kid">I studied electronics at a university in India</span></dd></div>
+      <div><dt>Languages</dt><dd><span class="pro">English, Tamil and Hindi</span><span class="kid">I speak English, Tamil and Hindi</span></dd></div>
+      <div><dt><span class="pro">Advising</span><span class="kid">Helping others</span></dt><dd><span class="pro">Honorary Expert at Primary Venture Partners, advising founders since 2024. Unpaid.</span><span class="kid">I give advice to people who are starting new companies</span></dd></div>
+      <div><dt><span class="pro">Member</span><span class="kid">Club</span></dt><dd><span class="pro">Responsible AI Institute</span><span class="kid">A club for people who want robots to be fair and safe</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- PROJECTS AND WRITING -->
+<section id="projects" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="tag" style="background:var(--sky)"><span class="pro">Projects and writing</span><span class="kid">Show and tell</span></span>
+        <h2><span class="pro">Things I have built and published</span><span class="kid">Things I made</span></h2>
+        <p class="pro">Side projects, on my own time. Every one is my own work.</p>
+        <p class="kid">I made all of these. Tap one to visit!</p>
+      </div>
+    </div>
+    <div class="grid4">
+      <a class="card proj reveal" href="/state-of-voice-agents/">
+        <div class="ic" style="background:color-mix(in srgb,var(--coral) 18%,transparent);color:var(--coral)"><svg aria-hidden="true"><use href="#i-voice"/></svg></div>
+        <h3><span class="pro">Voice Agents at the Front Door</span><span class="kid">The talking robots report</span></h3>
+        <p class="pro">My monthly report on conversational voice agents for regulated contact centers. Vendor-neutral, sourced, and updated every 30 days.</p>
+        <p class="kid">A report about robot phone helpers, and how they learn to listen and help.</p>
+        <span class="go"><span class="pro">Read the report</span><span class="kid">Take a look</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="card proj reveal" href="https://learnvedicmath.com/" target="_blank" rel="noopener">
+        <div class="ic" style="background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal)"><svg aria-hidden="true"><use href="#i-book"/></svg></div>
+        <h3>Learn Vedic Math</h3>
+        <p class="pro">A free site for learning math from age 4 to adult: speed tricks, practice from counting to calculus, games, and daily Stars and Boards.</p>
+        <p class="kid">Math speed tricks, games, Stars and Boards. Fun for every age!</p>
+        <span class="go">learnvedicmath.com<svg aria-hidden="true"><use href="#i-out"/></svg><span class="md-sr-only">(opens in a new tab)</span></span>
+      </a>
+      <a class="card proj reveal" href="#games">
+        <div class="ic" style="background:color-mix(in srgb,var(--sun) 22%,transparent);color:var(--ink)"><svg aria-hidden="true"><use href="#i-code"/></svg></div>
+        <h3><span class="pro">Games on this page</span><span class="kid">Games right here</span></h3>
+        <p class="pro">Brain Lab, Bug Hunt and the Design Lab, plus Robot Maze in kid mode. Building games is my passion, and more are on the way.</p>
+        <p class="kid">Brain Lab, Bug Hunt and Robot Maze. I love making games, and more are coming!</p>
+        <span class="go">Play<svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="card proj reveal" href="/design-system/">
+        <div class="ic" style="background:color-mix(in srgb,var(--sky) 18%,transparent);color:var(--sky)"><svg aria-hidden="true"><use href="#i-ui"/></svg></div>
+        <h3><span class="pro">Design system</span><span class="kid">Paint box</span></h3>
+        <p class="pro">The colors, type and components behind every page here, in two color schemes: Daybreak and Deep Space.</p>
+        <p class="kid">All the colors and shapes I use to build these pages.</p>
+        <span class="go"><span class="pro">See the system</span><span class="kid">Open the paint box</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- POINT OF VIEW -->
+<section id="views">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="tag" style="background:var(--plum)"><span class="pro">Point of view</span><span class="kid">Big ideas</span></span>
+        <h2><span class="pro">What I believe</span><span class="kid">Things I believe</span></h2>
+        <p class="pro">Opinions formed building voice and chat agents in healthcare. They are mine, not my employer's.</p>
+        <p class="kid">Four ideas I think about a lot.</p>
+      </div>
+    </div>
+    <ul class="beliefs">
+      <li class="reveal" style="--b:var(--teal)">
+        <h3>Think first, then talk.</h3>
+        <p class="pro">People do not say every thought out loud before they answer, and agents should not either. A fast model makes the silent decision, then a larger model writes the reply. <a href="#lab">See it in the Brain Lab</a>.</p>
+        <p class="kid">Good helpers think quietly first, then give a great answer. <a href="#lab">Peek inside a robot brain</a>.</p>
+      </li>
+      <li class="reveal" style="--b:var(--sun)">
+        <h3><span class="pro">The router should be small.</span><span class="kid">Small helpers pick the job.</span></h3>
+        <p class="pro">Choosing which specialist agent and which tools handle a request is a quick, typed decision. A small, cheap System-1 model does it well and leaves the large model for the reply.</p>
+        <p class="kid">A tiny, speedy helper picks the right big helper for each job.</p>
+      </li>
+      <li class="reveal" style="--b:var(--coral)">
+        <h3><span class="pro">Regulated work needs governed facts.</span><span class="kid">Robots must follow the rules.</span></h3>
+        <p class="pro">In regulated industries, build a governed fact store first. Treat a privately trained model as a gated trial, and scale it only if it beats retrieval. <a href="/state-of-voice-agents/">The monthly report has the detail</a>.</p>
+        <p class="kid">Where safety matters most, robot helpers should only use facts that grown-ups have checked.</p>
+      </li>
+      <li class="reveal" style="--b:var(--sky)">
+        <h3><span class="pro">The open question.</span><span class="kid">A big question.</span></h3>
+        <p class="pro">If the machines write the code, what exactly are we all doing on this Zoom call? I am still working on my answer.</p>
+        <p class="kid">If robots write the computer code, what will people do? What do you think?</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- GAMES: why they are here, and where each one is -->
+<section id="games" class="alt games-intro">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="tag" style="background:var(--sun)">Play</span>
+        <h2><span class="pro">Now for the games</span><span class="kid">Game time!</span></h2>
+        <p class="pro">Building games is my passion, so this site is where I put them. Kid mode exists for the same reason: flip the switch in the header and everything is explained for an 8-year-old. More games are on the way.</p>
+        <p class="kid">I love making games, so I keep adding more here. Pick one and play!</p>
+        <div class="cta">
+          <a class="btn" href="#lab"><span class="pro">Brain Lab</span><span class="kid">Robot brain</span></a>
+          <a class="btn" href="#bugs">Bug Hunt</a>
+          <a class="btn" href="#play"><span class="pro">Design Lab</span><span class="kid">Robot Maze</span></a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -532,7 +709,7 @@ html.motion-paused .reveal{opacity:1;transform:none}
     </div>
     <div class="lab">
       <div class="reveal">
-        <h3 style="font-size:1.25rem"><span class="pro">Try a customer request</span><span class="kid">Ask the robot something</span></h3>
+        <h3 style="font-size:1.25rem"><span class="pro">Try a patient request</span><span class="kid">Ask the robot something</span></h3>
         <div class="chips" id="chips"></div>
         <form class="lab-ask" id="askForm">
           <label class="md-sr-only" for="askInput">Type your own question</label>
@@ -540,7 +717,7 @@ html.motion-paused .reveal{opacity:1;transform:none}
           <button class="btn sm" type="submit">Ask</button>
         </form>
         <p class="mono" style="color:var(--ink-muted);margin-top:16px">
-          <span class="pro">Demo only. Routing here is keyword-based to illustrate the pattern.</span>
+          <span class="pro">Demo only, set at a clinic front desk. Routing here is keyword-based to illustrate the pattern.</span>
           <span class="kid">Psst: this is a pretend robot, but real ones work a lot like this.</span>
         </p>
       </div>
@@ -670,64 +847,13 @@ export default helpCustomer;</div>
   </div>
 </section>
 
-<!-- JOURNEY -->
-<section id="journey">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <span class="tag" style="background:var(--teal);color:var(--on-accent)">The Journey</span>
-        <h2><span class="pro">Career, one level at a time</span><span class="kid">My video game levels</span></h2>
-        <p class="pro">Click a level for the details.</p>
-        <p class="kid">Every job is a new level. Tap one to see what I learned there!</p>
-      </div>
-    </div>
-    <div class="map reveal">
-      <div class="track-line" aria-hidden="true"></div>
-      <div class="levels" role="tablist" id="levels"></div>
-    </div>
-    <div class="detail" id="detail" role="tabpanel" aria-live="polite"></div>
-
-    <div class="stats reveal">
-      <div class="stat"><div class="k"><span class="pro">Years building</span><span class="kid">Years coding</span></div><div class="v">17</div><p><span class="pro">Since 2009, from Java trainee to director</span><span class="kid">Longer than some of you have been alive!</span></p></div>
-      <div class="stat"><div class="k"><span class="pro">AI squad growth</span><span class="kid">Robot team</span></div><div class="v">2 &rarr; 25</div><p><span class="pro">Engineers, QA, and conversational designers</span><span class="kid">From 2 builders to 25 builders</span></p></div>
-      <div class="stat"><div class="k"><span class="pro">Patient NPS</span><span class="kid">Happier patients</span></div><div class="v">+25%</div><p><span class="pro">Scheduling, lab results, and billing experiences</span><span class="kid">More people said "this helps!"</span></p></div>
-      <div class="stat"><div class="k"><span class="pro">Revenue impact</span><span class="kid">Teams led at once</span></div><div class="v"><span class="pro">$70M+</span><span class="kid">10+</span></div><p><span class="pro">Projected annual, from 10+ teams at Nike</span><span class="kid">All around the world</span></p></div>
-    </div>
-
-    <div style="margin-top:44px" class="reveal">
-      <h3 style="font-size:1.35rem;margin-bottom:14px"><span class="pro">Power-ups (a.k.a. the toolkit)</span><span class="kid">Power-ups I've collected</span></h3>
-      <div class="powerups">
-        <span class="pu"><i style="background:var(--teal)"></i>Multi-agent systems</span>
-        <span class="pu"><i style="background:var(--teal)"></i>MCP &amp; tool use</span>
-        <span class="pu"><i style="background:var(--coral)"></i>Conversational &amp; voice AI</span>
-        <span class="pu"><i style="background:var(--coral)"></i>LLM routing</span>
-        <span class="pu"><i style="background:var(--sky)"></i>React &amp; Next.js</span>
-        <span class="pu"><i style="background:var(--sky)"></i>TypeScript &amp; Node.js</span>
-        <span class="pu"><i style="background:var(--sky)"></i>Python</span>
-        <span class="pu"><i style="background:var(--sun)"></i>DevOps &amp; platform engineering</span>
-        <span class="pu"><i style="background:var(--sun)"></i>FinOps</span>
-        <span class="pu"><i style="background:var(--plum)"></i>AI governance</span>
-        <span class="pu"><i style="background:var(--plum)"></i>Regulated domains</span>
-        <span class="pu"><i style="background:var(--plum)"></i>Building teams</span>
-        <span class="pu"><i style="background:var(--sky)"></i>Micro frontends</span>
-        <span class="pu"><i style="background:var(--sun)"></i>AWS</span>
-        <span class="pu"><i style="background:var(--sun)"></i>Google Cloud</span>
-        <span class="pu"><i style="background:var(--sun)"></i>Java (Oracle certified)</span>
-        <span class="pu"><i style="background:var(--teal)"></i>Experimentation &amp; personalization</span>
-        <span class="pu"><i style="background:var(--coral)"></i>AI evals &amp; red-teaming</span>
-        <span class="pu"><i style="background:var(--plum)"></i>Speaks English, Tamil &amp; Hindi</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- SAY HI -->
 <section id="hello" style="padding-top:24px">
   <div class="wrap">
     <div class="hello reveal">
       <div>
         <h2><span class="pro">Let's build something useful.</span><span class="kid">Want to build a robot together?</span></h2>
-        <p class="pro">Agentic AI, voice agents in regulated industries, platform strategy, or just a good engineering debate. I'm always up for the conversation.</p>
+        <p class="pro">Agentic engineering, voice agents, compliance technology, or just a good engineering debate. I'm always up for the conversation.</p>
         <p class="kid">Ask a grown-up to help you say hi. And remember: the best engineers ask lots of questions!</p>
       </div>
       <div class="cta" style="margin:0">

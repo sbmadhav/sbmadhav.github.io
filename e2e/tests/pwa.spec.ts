@@ -2,7 +2,7 @@ import { test, expect, isHttps } from './fixtures';
 import type { Page } from '@playwright/test';
 
 /* The root service worker (sw.js): registers from the home page, makes it work offline,
-   and leaves /vedic-math/ and /state-of-voice-agents/ (other repos) to the network.
+   and leaves /state-of-voice-agents/ (another repo) to the network.
    Chromium only: Playwright reports service-worker responses and offline mode reliably there.
    Needs https (the home page registers the worker only on https). */
 
@@ -67,26 +67,26 @@ test.describe('Service worker and offline', () => {
     }
   });
 
-  test('leaves /vedic-math/ and /state-of-voice-agents/ to the network', async ({ page, context }) => {
+  test('leaves /state-of-voice-agents/ to the network', async ({ page, context }) => {
     await controlled(page);
-    for (const path of ['/vedic-math/', '/state-of-voice-agents/']) {
+    for (const path of ['/state-of-voice-agents/']) {
       const res = await page.goto(path, { waitUntil: 'load' });
       expect(res?.status(), path).toBe(200);
       expect(res?.fromServiceWorker(), `${path} must not come from the root worker`).toBe(false);
     }
-    // Nothing from those paths ends up in the root worker's cache
+    // Nothing from that path ends up in the root worker's cache
     const leaked = await page.evaluate(async () => {
       const out: string[] = [];
       for (const k of (await caches.keys()).filter(k => k.startsWith('madhav-'))) {
         for (const r of await (await caches.open(k)).keys()) {
           const p = new URL(r.url).pathname;
-          if (p.startsWith('/vedic-math') || p.startsWith('/state-of-voice-agents')) out.push(p);
+          if (p.startsWith('/state-of-voice-agents')) out.push(p);
         }
       }
       return out;
     });
     expect(leaked).toEqual([]);
-    // And offline, the root worker does not pretend to serve them
+    // And offline, the root worker does not pretend to serve it
     await context.setOffline(true);
     try {
       const res = await page.goto('/state-of-voice-agents/').catch(() => null);

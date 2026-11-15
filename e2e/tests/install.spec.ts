@@ -6,7 +6,7 @@ import type { Page } from '@playwright/test';
    - otherwise short steps for this browser;
    - hidden when the site already runs as an installed app. */
 
-const PAGES = ['/', '/vedic-math/', '/design-system/', '/state-of-voice-agents/', '/no-such-page-e2e/'];
+const PAGES = ['/', '/design-system/', '/state-of-voice-agents/', '/no-such-page-e2e/'];
 
 const UA = {
   iphone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
@@ -61,7 +61,7 @@ test.describe('Install app', () => {
   });
 
   test('native prompt dismissed: the button stays and the next click shows the steps', async ({ page }) => {
-    await page.goto('/vedic-math/');
+    await page.goto('/design-system/');
     await firePrompt(page, 'dismissed');
     await openExplore(page);
     await installBtn(page).click();

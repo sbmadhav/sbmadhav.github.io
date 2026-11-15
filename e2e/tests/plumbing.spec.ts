@@ -71,8 +71,10 @@ test.describe('Plumbing', () => {
     const r = await request.get('/sitemap.xml');
     expect(r.status()).toBe(200);
     const locs = [...(await r.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-    expect(locs.length).toBeGreaterThanOrEqual(4);
+    expect(locs.length).toBeGreaterThanOrEqual(3);
     for (const loc of locs) {
+      // Only this domain's own pages: sites on other domains (learnvedicmath.com) keep their own sitemap
+      expect(new URL(loc).origin, loc).toBe('https://sbmadhav.com');
       const path = new URL(loc).pathname;
       const res = await request.get(path);
       expect(res.status(), loc).toBe(200);

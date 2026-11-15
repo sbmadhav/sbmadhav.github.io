@@ -70,7 +70,8 @@
       p.setAttribute('transform', `translate(${Math.cos(a)*d} ${Math.sin(a)*d})`);
     });
   }, { passive:true });
-  setTimeout(() => say(isKid() ? "Hi friend! Tap me!" : "Hi there. Click me, I have opinions."), 1200);
+  // The greeting never talks over something Bolt is already saying (a click or a scheme change in the first second)
+  setTimeout(() => { if (!bubble.classList.contains('show')) say(isKid() ? "Hi friend! Tap me!" : "Hi there. Click me, I have opinions."); }, 1200);
 
   /* ---------- Say my name ---------- */
   $('#sayName').addEventListener('click', () => {
@@ -86,15 +87,22 @@
   /* ---------- Brain Lab ---------- */
   const LAB = {
     pro: {
-      lanes: [{id:'billing',label:'Billing agent'},{id:'complaint',label:'Care agent'},{id:'account',label:'Account agent'}],
+      lanes: [{id:'scheduling',label:'Scheduling agent'},{id:'billing',label:'Billing agent'},{id:'handoff',label:'Human handoff'}],
       qs: [
-        {q:"I was charged twice for my order", route:'billing', tools:['payments.lookup','refunds.create'], a:"Sorry about that. I found the duplicate charge from yesterday and started a refund. You'll see it back on your card in 3 to 5 business days."},
-        {q:"What's my current balance?", route:'account', tools:['accounts.read'], a:"Your available balance is shown in the app under Accounts. I can also text it to the number on file if that's easier."},
-        {q:"I want to file a complaint", route:'complaint', tools:['cases.create','sentiment'], a:"I'm sorry it came to this. I've opened a case and flagged it for a specialist who will follow up within one business day. Want to tell me what happened?"},
-        {q:"Why was my card declined?", route:'billing', tools:['auth.decisions','fraud.signals'], a:"It looks like a security check paused that purchase. If it was you, confirm in the app and you can retry right away."}
+        {q:"I need to move my appointment", route:'scheduling', tools:['schedule.search','appointments.reschedule'], a:"I can help with that. The same doctor has openings next Tuesday at 9:40 and Thursday at 2:15. Which one works better for you?"},
+        {q:"Why did I get this bill?", route:'billing', tools:['billing.lookup'], a:"Let me look. This bill is the part of your last visit that insurance did not cover. I can read you the line items, or text a link to the full statement to the number on file."},
+        {q:"Do you have anything tomorrow morning?", route:'scheduling', tools:['schedule.search'], a:"There is an opening tomorrow at 8:20 at the clinic closest to you. Want me to book it?"},
+        {q:"Can I talk to a real person?", route:'handoff', tools:['handoff.create','call.summary'], a:"Of course. I am connecting you to the front desk now, and I have passed along what we talked about so you do not have to repeat it."}
       ],
-      rules: [[/charg|refund|pay|bill|declin|fee|card/i,'billing'],[/complain|angry|upset|unhappy|bad|terrible/i,'complaint']],
-      fallback: {route:'account', tools:['accounts.read'], a:"Happy to help with that. Let me pull up your account details first so I get it right."}
+      // A rule may carry its own reply (third entry). Anything that sounds urgent goes to a person first.
+      rules: [
+        [/\b(chest|breath|bleed|emergenc|911|pain|dizzy|faint|overdos)/i,'handoff',{route:'handoff', tools:['handoff.urgent'], a:"If this is an emergency, please hang up and call 911. I am connecting you to a nurse right now and will stay on the line until they pick up."}],
+        [/upset|angry|complain|frustrat|terrible|unhappy/i,'handoff',{route:'handoff', tools:['handoff.create','call.summary'], a:"I am sorry about that. I am connecting you to a person at the front desk now, and I have passed along what happened so you do not have to repeat it."}],
+        [/bill|charg|pay|cost|insur|copay|refund|statement/i,'billing'],
+        [/appoint|schedul|book|cancel|doctor|visit|tomorrow|today|opening|slot/i,'scheduling'],
+        [/person|human|someone|operator|representative/i,'handoff']
+      ],
+      fallback: {route:'handoff', tools:['handoff.create'], a:"I want to make sure you get the right help, so I am connecting you to a person on our team and passing along what you asked."}
     },
     kid: {
       lanes: [{id:'joke',label:'Joke helper'},{id:'math',label:'Math helper'},{id:'science',label:'Science helper'}],
@@ -158,9 +166,9 @@
     e.preventDefault();
     const q = $('#askInput').value.trim(); if (!q) return;
     const c = cfg();
-    let route = null;
-    for (const [re, r] of c.rules) if (re.test(q)) { route = r; break; }
-    const hit = route && c.qs.find(x => x.route === route);
+    let route = null, own = null;
+    for (const [re, r, reply] of c.rules) if (re.test(q)) { route = r; own = reply; break; }
+    const hit = own || (route && c.qs.find(x => x.route === route));
     const item = hit ? {...hit} : {...c.fallback};
     if (route && isKid() && route === 'math'){
       const m = q.match(/(\d+)\s*([+\-x*])\s*(\d+)/);
@@ -238,11 +246,11 @@
   const LEVELS = [
     { icon:'i-case', lv:'Level 1', name:{pro:'Consulting',kid:'Problem Solvers'},
       role:{pro:'Cognizant & Publicis Sapient · 2009 to 2021 · Chennai, Bengaluru, Chicago, Charlotte',kid:'Solved computer puzzles for lots of companies'},
-      pro:['Cognizant (2009 to 2014): Java trainee to Associate, Projects; built the very first Comerica Portal for a banking client','Publicis Sapient (2014 to 2021): Senior Engineer to Architect, Experience Technology; frontend architecture, micro frontends, and performance on React and Node.js','Conference speaker and mentor; R&D with WebVR, Leap Motion, Raspberry Pi, and Google Cardboard'],
+      pro:['Cognizant (2009 to 2014): Java trainee to Associate, Projects; built the very first Comerica Portal for a banking client','Publicis Sapient (2014 to 2021): Senior Engineer to Architect, Experience Technology; frontend architecture, micro frontends, and performance on React and Node.js; the last stretch on the Lowe\'s account','Conference speaker and mentor; R&D with WebVR, Leap Motion, Raspberry Pi, and Google Cardboard'],
       kid:['Learned to code in a big class with 30 friends','Built my first real app, for a bank!','Played with virtual reality goggles and tiny Raspberry Pi computers'] },
     { icon:'i-tools', lv:'Level 2', name:{pro:"Lowe's",kid:'Hardware Store'},
       role:{pro:'Lead Software Engineer · 2019 to 2022 · Charlotte',kid:'Helped people find hammers, nails, and paint'},
-      pro:['Led modernization of Lowes.com search and product listing platforms','Migrated large consumer apps from on-premise to Google Cloud','Scaled the team from 3 to 21 developers while keeping quality high'],
+      pro:['Came to Lowe\'s through Publicis Sapient, then joined in-house; led modernization of Lowes.com search and product listing platforms','Migrated large consumer apps from on-premise to Google Cloud','Scaled the team from 3 to 21 developers while keeping quality high'],
       kid:['Made the search box on a giant hardware store website work better','Moved the website from old computers to the cloud','Grew my team from 3 people to 21!'] },
     { icon:'i-sneaker', lv:'Level 3', name:{pro:'Nike',kid:'Sneaker World'},
       role:{pro:'Global Director of Engineering · 2022 to 2023',kid:'Leader of sneaker teams around the world'},
@@ -254,12 +262,12 @@
       kid:['Built GRACE, a robot voice that helps people book doctor visits','Grew the robot team from 2 people to 25','Taught the robot to ask a real person for help when it isn\'t sure'] },
     { icon:'i-bank', lv:'Level 5', name:{pro:'Capital One',kid:'Bank Castle'},
       role:{pro:'Director of Software Engineering, Risk Tech · April 2026 to now · New York',kid:'Current level!'},
-      pro:['Leading Risk Tech engineering on AWS','Bringing agentic AI into engineering with governance built in','Also an Expert advisor to Primary Venture Partners founders (2024 to 2026)'],
-      kid:['Builds computer helpers that keep a giant bank safe','Makes sure the helpers follow the rules','Still squashing bugs every day'], current:true },
+      pro:['Lead engineering for Core Compliance on AWS: compliance testing, corporate surveillance, and corporate integrity and ethics','An organization of about 70, led through senior managers who are people leaders and senior individual contributors','AI in production is small and deliberate so far, in compliance testing: reading unstructured documents, drafting test reports, and adapting tests to regulatory change','The team builds with agentic coding tools and is moving to harness engineering: tools connected over MCP and spec-driven development'],
+      kid:['Leads the team that builds rule checkers for a giant bank','Makes sure the robot helpers follow the rules too','Still squashing bugs every day'], current:true },
     { icon:'i-q', lv:'Level 6', name:{pro:"What's next",kid:'Secret level'},
       role:{pro:'Loading...',kid:'Not unlocked yet!'},
-      pro:['Voice agents that think before they talk','Privately trained models for regulated industries','Answering the question: if machines write the code, what are we all doing on this Zoom call?'],
-      kid:['Smarter talking robots','Robots that help even more people','Maybe you can help build them someday!'] }
+      pro:['Building a best-in-class voice agent of my own, for personal projects like Learn Vedic Math','More games for this site, because building them is my passion','Answering the question: if machines write the code, what are we all doing on this Zoom call?'],
+      kid:['A talking robot helper that I build all by myself','More games for this website','Maybe you can help build them someday!'] }
   ];
   let current = 4;
   const levelsEl = $('#levels');
@@ -787,15 +795,15 @@
         { id:'bigdb', name:'One giant database server', cost:4, desc:'Buy the biggest machine available.', fx:{up:10}, note:'The giant database bought a little headroom for a lot of budget.' },
         { id:'redesign', name:'Launch the new site design same day', cost:2, desc:'Marketing wants a fresh look for the big day.', fx:{up:-15,trust:-5}, note:'Shipping a redesign on launch day added risk exactly when you could least afford it.' }
       ] },
-    { id:'voice', title:'The Bank Voice Agent', budget:10,
-      brief:'Build a phone agent that answers card questions for a bank. It must never move money by mistake, and upset callers must reach a human fast.',
+    { id:'voice', title:'The Clinic Voice Agent', budget:10,
+      brief:'Build a phone agent that books and changes appointments for a clinic. It must never book the wrong patient or the wrong time, and worried callers must reach a human fast.',
       goals:{ safe:75, trust:70, fast:50 },
       cards:[
-        { id:'confirm', name:'Confirm before any money moves', cost:2, desc:'Read back the action and get a clear yes.', fx:{safe:40}, note:'Read-back confirmations stopped every accidental transfer.', key:true, miss:'Without confirmations, a misheard "fifteen" became "fifty".' },
-        { id:'handoff', name:'Human handoff when unsure or upset', cost:2, desc:'Route low-confidence or frustrated callers to people.', fx:{trust:35,safe:10}, note:'Hard calls went to humans with a summary, so callers never repeated themselves.', key:true, miss:'Upset callers got stuck in a loop with the bot.' },
+        { id:'confirm', name:'Confirm before booking or changing', cost:2, desc:'Read back the patient, day and time, and get a clear yes.', fx:{safe:40}, note:'Read-back confirmations stopped every wrong booking.', key:true, miss:'Without confirmations, a misheard "Tuesday" became "Thursday" and a patient missed the visit.' },
+        { id:'handoff', name:'Human handoff when unsure, upset or urgent', cost:2, desc:'Route low-confidence, frustrated or clinical calls to people.', fx:{trust:35,safe:10}, note:'Hard calls went to staff with a summary, so callers never repeated themselves.', key:true, miss:'A worried caller got stuck in a loop with the bot.' },
         { id:'router', name:'Fast router picks the specialist', cost:2, desc:'A small, quick model decides who handles the call.', fx:{fast:30,safe:5}, note:'The fast router kept replies snappy and cheap. Think first, then talk.', key:true, miss:'Every call went through the slowest path, so callers heard long pauses.' },
-        { id:'evals', name:'Test set & red-teaming before launch', cost:2, desc:'Try to break it on purpose before customers do.', fx:{safe:20,trust:10}, note:'Red-teaming found the prompt-injection trick before a customer did.' },
-        { id:'scoped', name:'Least-privilege data access', cost:2, desc:'The agent can read only what each call needs.', fx:{safe:15,trust:10}, note:'Scoped access meant a confused agent could not see what it did not need.' },
+        { id:'evals', name:'Test set & red-teaming before launch', cost:2, desc:'Try to break it on purpose before patients do.', fx:{safe:20,trust:10}, note:'Red-teaming found the prompt-injection trick before a patient did.' },
+        { id:'scoped', name:'Least-privilege data access', cost:2, desc:'The agent can read only what each call needs.', fx:{safe:15,trust:10}, note:'Scoped access meant a confused agent could not see records it did not need.' },
         { id:'voice', name:'Natural, low-latency voice', cost:2, desc:'Stream speech so replies start instantly.', fx:{fast:25,trust:10}, note:'Streaming voice made the agent feel like a conversation, not a menu.' },
         { id:'onebig', name:'One giant model does everything', cost:3, desc:'Skip the routing and specialists.', fx:{fast:-15,safe:-5}, note:'One giant model was slower and harder to test than focused specialists.' },
         { id:'keepall', name:'Keep every recording forever', cost:1, desc:'Just in case it is useful someday.', fx:{trust:-25}, note:'Keeping recordings forever created privacy risk with no clear purpose.' }
