@@ -65,6 +65,8 @@ test.describe('Home page', () => {
     await expect(cards.nth(0).locator('p.pro')).toContainText('about 70');
     await expect(cards.nth(0).locator('p.pro')).toContainText('3 to 21');
     await expect(cards.nth(0).locator('p.pro')).toContainText('2 to 25');
+    await expect(cards.nth(2).locator('p.pro')).toContainText('Claude Code');
+    await expect(cards.nth(2).locator('p.pro')).toContainText('OpenSpec');
     await expect(cards.nth(3).locator('p.pro')).toContainText('At Ascension I built GRACE');
     await expect(cards.nth(3).locator('p.pro')).toContainText('on my own time');
   });

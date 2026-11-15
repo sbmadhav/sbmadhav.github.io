@@ -4,9 +4,11 @@
    worker caches nothing and leaves every request to the network, so a copy served straight from
    the source (or published by mistake without the build) never serves stale files.
 
-   Scope: registered from the home page with scope "/". It leaves /state-of-voice-agents/ alone
-   (that path is served from its own repo, so this file cannot version it) and every other
-   origin's requests.
+   Scope: registered from the home page with scope "/". It leaves /state-of-voice-agents/ and
+   /vedic-math/ alone (those paths belong to their own repos, so this file cannot version them)
+   and every other origin's requests. /vedic-math/ is the old address of Learn Vedic Math: the
+   vedic-math repo publishes its "moved" page there (it hands a visitor's progress over to
+   learnvedicmath.com) and later a redirect, so nothing under it may ever come from this cache.
    /design-system/ is also another repo (sbmadhav/design-system) but it is precached like the
    rest, because the pages need tokens.css, components.css and header.js offline (the pinned
    /design-system/v/<version>/ copies the pages link, plus the unversioned latest for the offline
@@ -26,7 +28,7 @@ const KILL = false;
 const VERSION = 'dev';
 const CACHE = `madhav-${VERSION}`;
 const RUNTIME_MAX = 150; // entries kept beyond the precache list; the oldest go first
-const NETWORK_ONLY = ['/state-of-voice-agents/'];
+const NETWORK_ONLY = ['/state-of-voice-agents/', '/vedic-math/'];
 const PRECACHE = [
   './',
   'index.html',

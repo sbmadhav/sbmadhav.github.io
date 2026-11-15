@@ -1,5 +1,5 @@
 // Serves this checkout for local end-to-end runs. Paths that live in other repos
-// (/design-system/, /state-of-voice-agents/) come from the live site,
+// (/design-system/, /vedic-math/, /state-of-voice-agents/) come from the live site,
 // so the suite runs exactly as on sbmadhav.com but with this branch's files.
 //   node local-server.mjs [port] [dir]   (default 8123; 8000 is often taken)
 // dir (relative to the checkout) serves a build instead, for example _site from
@@ -16,7 +16,7 @@ if (root !== checkout && !root.startsWith(checkout + path.sep)) throw new Error(
 const port = +(process.argv[2] || process.env.PORT || 8123);
 const host = process.env.HOST || '127.0.0.1';
 const LIVE = 'https://sbmadhav.com';
-const PROXIED = ['/design-system/', '/state-of-voice-agents/'];
+const PROXIED = ['/design-system/', '/vedic-math/', '/state-of-voice-agents/'];
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
 const BLOCKED = /^\/(e2e|scripts|\.git|\.github|\.githooks)(\/|$)|^\/(CLAUDE|README)\.md$|^\/site-build\.py$/;
 
